@@ -1827,7 +1827,8 @@ void idPlayer::Spawn( void ) {
 	physicsObj.SetClipMask( MASK_PLAYERSOLID );
 	SetPhysics( &physicsObj );
 	InitAASLocation();
-	
+	//here you would change the player's spawn
+	//ex player.poisonLevel = spawnArgs.GetFloat("PoisonLevel");
 	skin = renderEntity.customSkin;
 
 	// only the local player needs guis
