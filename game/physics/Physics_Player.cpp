@@ -227,7 +227,7 @@ bool idPhysics_Player::SlideMove( bool gravity, bool stepUp, bool stepDown, bool
 			if ( !nearGround ) {
 				// trace down to see if the player is near the ground
 				// step checking when near the ground allows the player to move up stairs smoothly while jumping
-				stepEnd = current.origin + maxStepHeight * gravityNormal;
+				stepEnd = current.origin + (maxStepHeight + 1000) * gravityNormal;
 // RAVEN BEGIN
 // ddynerman: multiple clip worlds
 				gameLocal.Translation( self, downTrace, current.origin, stepEnd, clipModel, clipModel->GetAxis(), clipMask, self );
@@ -567,7 +567,7 @@ void idPhysics_Player::WaterMove( void ) {
 
 	// user intentions
 	if ( !scale ) {
-		wishvel = gravityNormal * 60; // sink towards bottom
+		wishvel = gravityNormal * 1000; // sink towards bottom
 	} else {
 		wishvel = scale * (viewForward * command.forwardmove + viewRight * command.rightmove);
 		wishvel -= scale * gravityNormal * command.upmove;
@@ -1111,11 +1111,12 @@ void idPhysics_Player::CheckGround( bool checkStuck ) {
 
 	// if the player didn't have ground contacts the previous frame
 	if ( !hadGroundContacts ) {
+
 		// don't do landing time if we were just going down a slope
 		if ( (current.velocity * -gravityNormal) < -200.0f ) {
 			// don't allow another jump for a little while
 			current.movementFlags |= PMF_TIME_LAND;
-			current.movementTime = 250;
+			current.movementTime = 0;
 		}		
 	}
 
@@ -1558,7 +1559,8 @@ void idPhysics_Player::MovePlayer( int msec ) {
 		// jumping out of water
 		idPhysics_Player::WaterJumpMove();
 	}
-	else if ( !gameLocal.isMultiplayer && waterLevel > 1 ) {
+	//else if ( !gameLocal.isMultiplayer && waterLevel > 1 ) {
+	else if (!gameLocal.isMultiplayer) {
 // RAVEN END
 		// swimming
 		idPhysics_Player::WaterMove();
@@ -1675,7 +1677,7 @@ idPhysics_Player::idPhysics_Player( void ) {
 	viewForward.Zero();
 	viewRight.Zero();
 	walking = false;
-	groundPlane = false;
+	groundPlane = true;
 	memset( &groundTrace, 0, sizeof( groundTrace ) );
 	groundMaterial = NULL;
 	ladder = false;
