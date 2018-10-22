@@ -191,9 +191,11 @@ void rvWeaponRocketLauncher::Think ( void ) {
 		}
 		
 		// If the rocket isnt guiding yet then adjust its speed back to normal
+		/*
 		if ( proj->GetGuideType ( ) == idGuidedProjectile::GUIDE_NONE ) {
 			proj->SetSpeed ( guideSpeedSlow, (proj->GetSpeed ( ) - guideSpeedSlow) / (guideSpeedFast - guideSpeedSlow) * guideAccelTime );
 		}
+		*/
 		proj->GuideTo ( tr.endpos );				
 	}
 	

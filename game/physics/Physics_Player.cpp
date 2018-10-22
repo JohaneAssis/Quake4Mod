@@ -577,7 +577,7 @@ void idPhysics_Player::WaterMove( void ) {
 	wishspeed = wishdir.Normalize();
 
 	if ( wishspeed > playerSpeed * PM_SWIMSCALE ) {
-		wishspeed = playerSpeed * PM_SWIMSCALE;
+		wishspeed = playerSpeed * PM_SWIMSCALE * 2;
 	}
 
 	idPhysics_Player::Accelerate( wishdir, wishspeed, PM_WATERACCELERATE );
