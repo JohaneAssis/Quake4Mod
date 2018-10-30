@@ -62,8 +62,8 @@ const float	PLAYER_ITEM_DROP_SPEED	= 100.0f;
 // how many units to raise spectator above default view height so it's in the head of someone
 const int SPECTATE_RAISE = 25;
 
-const int	HEALTH_PULSE		= 1000;			// Regen rate and heal leak rate (for health > 100)
-const int	ARMOR_PULSE			= 1000;			// armor ticking down due to being higher than maxarmor
+const int	HEALTH_PULSE		= 0;			// Regen rate and heal leak rate (for health > 100)
+const int	ARMOR_PULSE			= 1;			// armor ticking down due to being higher than maxarmor
 const int	AMMO_REGEN_PULSE	= 1000;			// ammo regen in Arena CTF
 const int	POWERUP_BLINKS		= 5;			// Number of times the powerup wear off sound plays
 const int	POWERUP_BLINK_TIME	= 1000;			// Time between powerup wear off sounds
@@ -4457,7 +4457,8 @@ void idPlayer::StartPowerUpEffect( int powerup ) {
 		case POWERUP_INVISIBILITY: {
 			powerUpOverlay = invisibilityOverlay;
 
-			powerUpSkin = declManager->FindSkin( spawnArgs.GetString( "skin_invisibility" ), false );
+			//powerUpSkin = declManager->FindSkin( spawnArgs.GetString( "skin_invisibility" ), false );
+			godmode = true;
 			break;
 		}
 
@@ -4568,6 +4569,7 @@ void idPlayer::StopPowerUpEffect( int powerup ) {
 			break;
 		}
 		case POWERUP_INVISIBILITY: {
+			godmode = false;
 			powerUpSkin = NULL;
 			break;
 		}
@@ -4783,9 +4785,11 @@ void idPlayer::ClearPowerup( int i ) {
 
 		powerUpOverlay = NULL;
 		StopSound( SND_CHANNEL_POWERUP_IDLE, false );
+		godmode = false;
 	}
 	
 	StopPowerUpEffect( i );
+	godmode = false;
 }
 
 /*
@@ -8252,6 +8256,7 @@ itemBuyStatus_t idPlayer::ItemBuyStatus( const char* itemName )
 			return IBS_ALREADY_HAVE;
 
 		// If we are full of ammo for all weapons, you can't buy the ammo refill anymore.
+	/*
 		bool fullAmmo = true;
 		for ( int i = 0 ; i < MAX_AMMOTYPES; i++ )
 		{
@@ -8264,7 +8269,9 @@ itemBuyStatus_t idPlayer::ItemBuyStatus( const char* itemName )
 	else if ( itemNameStr == "fc_armor_regen" )
 	{
 		return IBS_NOT_ALLOWED;
+	*/
 	}
+	
 
 	if ( gameLocal.gameType == GAME_DM || gameLocal.gameType == GAME_TOURNEY || gameLocal.gameType == GAME_ARENA_CTF || gameLocal.gameType == GAME_1F_CTF || gameLocal.gameType == GAME_ARENA_1F_CTF ) {
 		if ( itemNameStr == "ammo_regen" )
