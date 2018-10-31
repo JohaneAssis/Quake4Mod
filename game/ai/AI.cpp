@@ -3693,11 +3693,14 @@ void idAI::OnDeath( void ){
 		// Fixme!  Better guys should drop better stuffs!  Make drops related to guy type?  Do something cooler here?
 		//if( rVal < 25 ){	// Half of guys drop nothing?
 		//	spawnArgs.Set( "def_dropsItem1", "" );
-		if( rVal < 50 ){
+		if( rVal < 33 ){
 			spawnArgs.Set( "def_dropsItem1", "powerup_haste" ); //gonna be speed buff
-		}else if ( rVal < 100 ){
+		}else if ( rVal < 66 ){
 			spawnArgs.Set("def_dropsItem1", "powerup_quad_damage"); //gonna be defense buff
+		}else if (rVal < 100){
+			spawnArgs.Set("def_dropsItem1", "powerup_regeneration"); //gonna be damage to health buff
 		}
+		
 
 	}
 }

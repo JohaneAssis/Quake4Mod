@@ -10277,7 +10277,16 @@ void idPlayer::Damage( idEntity *inflictor, idEntity *attacker, const idVec3 &di
 		}
 
 		int oldHealth = health;
-		health -= damage;
+
+		if (powerUpOverlay == regenerationOverlay){
+			health += damage;
+		}
+		else if (powerUpOverlay == NULL){
+			health -= damage;
+		}
+		else{
+			health -= damage;
+		}
 
 		GAMELOG_ADD ( va("player%d_damage_taken", entityNumber ), damage );
 		GAMELOG_ADD ( va("player%d_damage_%s", entityNumber, damageDefName), damage );

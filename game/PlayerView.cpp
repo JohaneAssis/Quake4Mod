@@ -515,11 +515,13 @@ void idPlayerView::SingleView( idUserInterface *hud, const renderView_t *view, i
 	}
 
 	// draw screen blobs
-	if ( !pm_thirdPerson.GetBool() && !g_skipViewEffects.GetBool() ) {
+	//if (pm_thirdPerson.GetBool() && !g_skipViewEffects.GetBool()) {
+	if (!g_skipViewEffects.GetBool() ) {
 		for ( int i = 0 ; i < MAX_SCREEN_BLOBS ; i++ ) {
 			screenBlob_t	*blob = &screenBlobs[i];
 			if ( blob->finishTime <= gameLocal.time ) {
-				continue;
+				player->DrawHUD(hud);
+				continue;				
 			}
 			
 			blob->y += blob->driftAmount;
@@ -533,6 +535,27 @@ void idPlayerView::SingleView( idUserInterface *hud, const renderView_t *view, i
 				renderSystem->DrawStretchPic( blob->x, blob->y, blob->w, blob->h,blob->s1, blob->t1, blob->s2, blob->t2, blob->material );
 			}
 		}
+		
+		/*if (!pm_thirdPerson.GetBool() && !g_skipViewEffects.GetBool()) {
+			for (int i = 0; i < MAX_SCREEN_BLOBS; i++) {
+				screenBlob_t	*blob = &screenBlobs[i];
+				if (blob->finishTime <= gameLocal.time) {
+					player->DrawHUD(hud);
+					continue;
+				}
+
+				blob->y += blob->driftAmount;
+
+				float	fade = (float)(blob->finishTime - gameLocal.time) / (blob->finishTime - blob->startFadeTime);
+				if (fade > 1.0f) {
+					fade = 1.0f;
+				}
+				if (fade) {
+					renderSystem->SetColor4(1, 1, 1, fade);
+					renderSystem->DrawStretchPic(blob->x, blob->y, blob->w, blob->h, blob->s1, blob->t1, blob->s2, blob->t2, blob->material);
+				}
+			}
+			*/
 
 		// Render tunnel vision
 		if ( gameLocal.time < tvFinishTime ) {
