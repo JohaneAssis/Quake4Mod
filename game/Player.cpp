@@ -4283,6 +4283,7 @@ float idPlayer::PowerUpModifier( int type ) {
 		switch( type ) {
 			case PMOD_PROJECTILE_DAMAGE: {
 				mod *= 3.0f;
+				godmode = true;
 				break;
 			}
 			case PMOD_MELEE_DAMAGE: {
@@ -4299,12 +4300,17 @@ float idPlayer::PowerUpModifier( int type ) {
 	if ( PowerUpActive( POWERUP_HASTE ) ) {
 		switch ( type ) {
 			case PMOD_SPEED:	
-				mod *= 1.3f;
+				mod *= 2.0f;
 				break;
 
 			case PMOD_FIRERATE:
 				mod *= 0.7f;
 				break;
+
+			case PMOD_PROJECTILE_DEATHPUSH:
+				mod *= 8.0f;
+				break;
+			
 		}
 	}
 
@@ -4416,6 +4422,8 @@ void idPlayer::StartPowerUpEffect( int powerup ) {
 			powerupEffectTime = gameLocal.time;
 			powerupEffectType = POWERUP_QUADDAMAGE;
 
+			godmode = true;
+
 			break;
 		}
 
@@ -4451,14 +4459,14 @@ void idPlayer::StartPowerUpEffect( int powerup ) {
 			powerUpOverlay = hasteOverlay;
 
 			hasteEffect = PlayEffect( "fx_haste", GetPhysics()->GetOrigin(), GetPhysics()->GetAxis(), true );
+			godmode = false;
 			break;
 		}
 		
 		case POWERUP_INVISIBILITY: {
 			powerUpOverlay = invisibilityOverlay;
 
-			//powerUpSkin = declManager->FindSkin( spawnArgs.GetString( "skin_invisibility" ), false );
-			godmode = true;
+			powerUpSkin = declManager->FindSkin( spawnArgs.GetString( "skin_invisibility" ), false );
 			break;
 		}
 
@@ -4537,7 +4545,6 @@ void idPlayer::StopPowerUpEffect( int powerup ) {
 		(inventory.powerups & ( 1 << POWERUP_HASTE ) ) || 
 		(inventory.powerups & ( 1 << POWERUP_INVISIBILITY ) ) 
 		) )	{
-
 			powerUpOverlay = NULL;
 			StopSound( SND_CHANNEL_POWERUP_IDLE, false );
 		}
@@ -4549,6 +4556,7 @@ void idPlayer::StopPowerUpEffect( int powerup ) {
 			powerupEffectType = 0;
 
 			StopEffect( "fx_quaddamage" );
+			godmode = false;
 			break;
 		}
 		case POWERUP_REGENERATION: {
@@ -4785,11 +4793,12 @@ void idPlayer::ClearPowerup( int i ) {
 
 		powerUpOverlay = NULL;
 		StopSound( SND_CHANNEL_POWERUP_IDLE, false );
-		godmode = false;
 	}
 	
 	StopPowerUpEffect( i );
-	godmode = false;
+	if (powerUpOverlay != invisibilityOverlay){
+		godmode = false;
+	}
 }
 
 /*

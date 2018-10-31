@@ -3696,7 +3696,7 @@ void idAI::OnDeath( void ){
 		if( rVal < 50 ){
 			spawnArgs.Set( "def_dropsItem1", "powerup_haste" ); //gonna be speed buff
 		}else if ( rVal < 100 ){
-			spawnArgs.Set("def_dropsItem1", "powerup_invisibility"); //gonna be defense buff
+			spawnArgs.Set("def_dropsItem1", "powerup_quad_damage"); //gonna be defense buff
 		}
 
 	}
